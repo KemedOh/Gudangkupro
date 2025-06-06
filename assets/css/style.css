@@ -27,7 +27,6 @@
 * {
     transition: all 0.3s ease;
     box-sizing: border-box;
-    /* Ensure consistent box model */
 }
 
 body {
@@ -35,24 +34,24 @@ body {
     background: var(--dark-bg);
     color: var(--text-primary);
     overflow-x: hidden;
+    /* Penting untuk mencegah scroll horizontal yang tidak diinginkan */
     margin: 0;
-    /* Remove default margin */
     min-height: 100vh;
-    /* Ensure body takes full viewport height */
+}
+
+/* Class untuk mengunci scroll body saat sidebar mobile terbuka */
+body.sidebar-open {
+    overflow: hidden;
+    /* Mencegah scrolling konten utama saat sidebar terbuka di mobile */
 }
 
 /* --- Centering for Login/Register Pages Only --- */
-/* This class must be added to the <body> tag in login.html and register.html */
 body.center-form-page {
     display: flex;
     justify-content: center;
-    /* Horisontal tengah */
     align-items: center;
-    /* Vertikal tengah */
     flex-direction: column;
-    /* To stack elements if needed */
     min-height: 100vh;
-    /* Ensure centering applies to full viewport height */
 }
 
 /* --- Navbar Styles (Controlled by JavaScript) --- */
@@ -62,69 +61,48 @@ body.center-form-page {
     border-bottom: 1px solid var(--border-color);
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 
-    /* Properti untuk efek sembunyi/muncul yang akan diaktifkan/dinonaktifkan oleh JS */
     opacity: 0;
-    /* Sembunyikan secara default */
     transform: translateY(-100%);
-    /* Geser ke atas agar tidak terlihat */
     transition: opacity 0.5s ease, transform 0.5s ease;
-    /* Transisi yang halus */
     pointer-events: none;
-    /* Mencegah interaksi mouse saat tersembunyi */
 
     width: 100%;
-    /* Pastikan mengambil lebar penuh */
     position: fixed;
-    /* Penting agar bisa melayang di atas konten */
     top: 0;
-    /* Posisikan di paling atas */
     left: 0;
-    /* Pastikan dimulai dari tepi kiri */
     z-index: 1050;
-    /* Pastikan di atas konten lain */
     color: var(--text-primary);
 }
 
-/* Class ini akan ditambahkan oleh JavaScript saat navbar harus terlihat */
 .navbar.show-navbar {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
-    /* Izinkan interaksi mouse saat terlihat */
 }
 
-/* Pastikan semua link di navbar berwarna putih dan tidak berubah saat di-hover */
 .navbar a {
     color: var(--text-primary) !important;
-    /* Memaksa warna putih untuk link */
     text-decoration: none;
-    /* Menghilangkan garis bawah link */
 }
 
 .navbar a:hover {
     color: #e0e0e0 !important;
-    /* Sedikit lebih gelap saat di-hover untuk feedback visual */
 }
 
-/* Untuk tombol di navbar (seperti dropdown toggle atau logout) */
 .navbar .btn {
     color: var(--text-primary) !important;
     border-color: rgba(255, 255, 255, 0.25) !important;
-    /* Border putih transparan */
 }
 
 .navbar .btn:hover {
     color: white !important;
     background-color: rgba(255, 255, 255, 0.1) !important;
-    /* Background transparan saat hover */
 }
 
-/* Untuk teks navbar seperti "Halo, Admin Gudang!" */
 .navbar-text {
     color: var(--text-primary) !important;
 }
 
-/* Untuk ikon (misal Font Awesome) di navbar */
 .navbar i {
     color: var(--text-primary) !important;
 }
@@ -136,23 +114,21 @@ body.center-form-page {
     left: 0;
     width: 280px;
     height: 100vh;
-    /* Memastikan sidebar mengambil tinggi penuh viewport */
     background: var(--sidebar-bg);
     padding: 2rem 1rem;
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     transform: translateX(0);
-    /* Default to visible on large screens */
+    /* Default visible on large screens */
     animation: slideInLeft 0.5s ease forwards;
     padding-top: 5rem;
+    /* Space for navbar */
 
-    /* --- Tambahan untuk membuat sidebar bisa di-scroll --- */
-    **overflow-y: auto;
-    **
-    /* Ini akan membuat scrollbar vertikal muncul jika konten melebihi tinggi */
-    **overflow-x: hidden;
-    **
-    /* Ini akan menyembunyikan scrollbar horizontal yang tidak diinginkan */
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Tambahkan transisi untuk animasi saat sidebar muncul/sembunyi di mobile */
+    transition: transform 0.3s ease-in-out;
 }
 
 @keyframes slideInLeft {
@@ -165,9 +141,57 @@ body.center-form-page {
     }
 }
 
+/* Sembunyikan sidebar-toggle yang lama */
 .sidebar-toggle {
     display: none;
-    /* Hidden by default for larger screens */
+}
+
+/* Gaya untuk Hamburger Icon */
+.hamburger-icon-wrapper {
+    /* Ini akan diatur ulang di media query untuk mobile */
+    display: none;
+    /* Sembunyikan secara default di desktop */
+}
+
+.hamburger-icon {
+    display: flex;
+    /* Untuk menata bar secara vertikal */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    /* Lebar ikon */
+    height: 25px;
+    /* Tinggi ikon */
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    border: none;
+    position: relative;
+    /* Untuk animasi bar */
+}
+
+.hamburger-icon .bar {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: var(--text-primary);
+    /* Warna bar */
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Animasi untuk ikon hamburger saat aktif (sidebar terbuka) */
+.hamburger-icon.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger-icon.active .bar:nth-child(2) {
+    opacity: 0;
+    /* Sembunyikan bar tengah */
+}
+
+.hamburger-icon.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
 }
 
 .nav-link {
@@ -179,7 +203,6 @@ body.center-form-page {
     position: relative;
     overflow: hidden;
     white-space: nowrap;
-    /* Prevent wrapping */
 }
 
 .nav-link:hover {
@@ -202,14 +225,11 @@ body.center-form-page {
 /* --- Main Content Area --- */
 .main-content {
     margin-left: 280px;
-    /* Space for sidebar */
     padding: 2rem;
     min-height: 100vh;
     animation: fadeIn 0.8s ease;
-    /* Tambahkan padding-top untuk mengakomodasi navbar yang 'tersembunyi'
-       agar konten tidak tertutup saat navbar muncul. */
     padding-top: 5rem;
-    /* Sesuaikan dengan tinggi navbar Anda */
+    /* Adjust for fixed navbar */
 }
 
 @keyframes fadeIn {
@@ -228,7 +248,6 @@ body.center-form-page {
 body.center-form-page .main-content {
     margin-left: 0;
     padding: 0;
-    /* Reset padding/margin if main-content exists on centered pages */
 }
 
 /* --- Card Styles (for Dashboard, etc.) --- */
@@ -397,7 +416,6 @@ body.center-form-page .main-content {
 
 .table thead th {
     background-color: var(--sidebar-bg);
-    /* Darker header background */
     border-bottom: 1px solid var(--border-color);
     color: var(--text-secondary);
     font-weight: 600;
@@ -444,10 +462,8 @@ body.center-form-page .main-content {
 .form-control,
 .form-select {
     background-color: #4a5568;
-    /* Input background */
     border: 1px solid var(--border-color);
     color: var(--text-primary);
-    /* Input text color */
     padding: 12px 15px;
     border-radius: 8px;
 }
@@ -455,14 +471,12 @@ body.center-form-page .main-content {
 .form-control::placeholder,
 .form-select::placeholder {
     color: var(--text-secondary);
-    /* Placeholder color */
 }
 
 .form-control:focus,
 .form-select:focus {
     background-color: #4a5568;
     border-color: var(--primary-gradient);
-    /* Use gradient for focus border */
     box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
     color: var(--text-primary);
 }
@@ -473,7 +487,6 @@ body.center-form-page .main-content {
     margin-bottom: 8px;
     text-align: left;
     display: block;
-    /* Ensure label takes full width */
 }
 
 /* Specific button colors for forms and actions */
@@ -505,7 +518,6 @@ body.center-form-page .main-content {
     color: #212529;
 }
 
-/* Dark text for warning */
 .btn-warning:hover {
     background-color: #e0a800;
     border-color: #d39e00;
@@ -571,7 +583,6 @@ body.center-form-page .main-content {
     color: #212529;
 }
 
-/* Dark text for warning */
 .badge.bg-danger {
     background-color: var(--bs-danger) !important;
     color: white;
@@ -593,46 +604,38 @@ body.center-form-page .main-content {
     max-width: 400px;
     text-align: center;
     margin: auto;
-    /* Ensures it plays well with flex centering */
 }
 
 .register-container {
     max-width: 450px;
-    /* Slightly wider for more inputs */
 }
 
 .login-container h2,
 .register-container h2 {
     color: var(--bs-primary);
-    /* Use primary color for login heading */
     margin-bottom: 25px;
     font-weight: 700;
 }
 
 .register-container h2 {
     color: var(--bs-success);
-    /* Use success color for register heading */
 }
 
 .login-container .form-control {
     border: 1px solid var(--bs-primary);
-    /* Primary border for login inputs */
 }
 
 .register-container .form-control {
     border: 1px solid var(--bs-success);
-    /* Success border for register inputs */
 }
 
 .login-container .form-control:focus {
     border-color: #8da4f7;
-    /* Lighter primary on focus */
     box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
 }
 
 .register-container .form-control:focus {
     border-color: #4CAF50;
-    /* Lighter success on focus */
     box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
 }
 
@@ -695,7 +698,6 @@ body.center-form-page .main-content {
     margin-bottom: 15px;
 }
 
-
 /* --- Accordion (for Help page) --- */
 .accordion-item {
     background-color: var(--card-bg);
@@ -753,6 +755,7 @@ body.center-form-page .main-content {
     text-align: center;
     color: var(--text-secondary);
     position: relative;
+    /* Changed from fixed/absolute to relative for better flow on small screens */
     bottom: 0;
     width: calc(100% - 280px);
     /* Adjust width for sidebar */
@@ -763,33 +766,146 @@ body.center-form-page .main-content {
 @media (max-width: 768px) {
     .sidebar {
         transform: translateX(-100%);
-        width: 100%;
+        /* Sembunyikan sidebar di luar layar */
+        width: 280px;
+        /* Biarkan lebar standar agar tidak terlalu besar di mobile */
+        transition: transform 0.3s ease-in-out;
+        /* Animasi slide */
+        padding-top: 4rem;
+        /* Sesuaikan padding-top untuk mobile, agar tidak terlalu banyak ruang kosong */
     }
 
     .sidebar.show {
         transform: translateX(0);
+        /* Tampilkan sidebar saat kelas 'show' ditambahkan */
     }
 
     .main-content {
         margin-left: 0;
+        /* Konten utama tidak ada margin dari sidebar */
         padding: 1rem;
+        /* Padding lebih kecil untuk mobile */
+        padding-top: 4rem;
+        /* Sesuaikan padding-top untuk mobile agar tidak tertutup navbar */
     }
 
     .footer {
         margin-left: 0;
         width: 100%;
         /* Full width on small screens */
+        padding: 1rem;
+        /* Padding lebih kecil */
     }
 
-    .sidebar-toggle {
+    /* Penyesuaian untuk Navbar */
+    .navbar .container-fluid {
+        position: relative;
+        /* Penting: Jadikan container-fluid sebagai patokan untuk posisi absolut */
+        padding-left: 60px;
+        /* Beri ruang di kiri untuk hamburger icon */
+    }
+
+    /* Atur tampilan ikon hamburger baru di dalam navbar untuk mobile */
+    .navbar .hamburger-icon-wrapper {
         display: block;
-        background: var(--primary-gradient);
-        border: none;
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
+        /* Tampilkan di mobile */
+        position: absolute;
+        /* Posisikan secara absolut di dalam container-fluid */
+        left: 15px;
+        /* Sesuaikan posisi dari kiri */
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1060;
+        /* Lebih tinggi dari elemen navbar lainnya agar bisa diakses */
+    }
+
+    /* Atur posisi Navbar Brand (logo dan tulisan) */
+    .navbar-brand {
+        position: relative;
+        /* Jadikan relative agar z-index bekerja dengan baik */
+        z-index: 1055;
+        /* Pastikan di bawah hamburger tapi di atas elemen lain jika ada */
+        margin-left: 0 !important;
+        /* Hapus margin default jika ada */
+        padding-left: 0 !important;
+        /* Hapus padding default jika ada */
+    }
+
+    /* Opsi: Untuk memastikan elemen lain tidak tertimpa */
+    .navbar .d-flex.align-items-center {
+        /* Dropdown notifikasi dan Logout */
+        position: relative;
+        z-index: 1055;
+    }
+
+    /* Penyesuaian untuk tabel di layar kecil */
+    .table-responsive {
+        overflow-x: auto;
+        /* Memungkinkan tabel di-scroll secara horizontal */
+        -webkit-overflow-scrolling: touch;
+        /* Untuk scrolling yang lebih mulus di iOS */
+    }
+
+    /* Penyesuaian untuk card/grid layout di layar kecil */
+    .row>[class*="col-"] {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .stats-card,
+    .chart-card,
+    .quick-action {
+        margin-bottom: 1rem;
+        /* Kurangi margin bawah di mobile */
+    }
+
+    /* Mengurangi padding pada elemen form untuk layar kecil */
+    .form-control,
+    .form-select {
+        padding: 0.75rem 1rem;
+    }
+
+    /* Menyesuaikan ukuran font untuk elemen tertentu agar lebih mudah dibaca */
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .stats-number {
+        font-size: 2rem;
+    }
+
+    /* --- Overlay untuk Sidebar di Mobile (Penting!) --- */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Warna overlay transparan */
+        z-index: 999;
+        /* Di bawah sidebar tapi di atas konten lain */
+        display: none;
+        /* Sembunyikan secara default */
+        cursor: pointer;
+        opacity: 0;
+        /* Mulai dengan opacity 0 untuk transisi */
+        transition: opacity 0.3s ease-in-out;
+        /* Animasi fade-in/out */
+    }
+
+    /* Kelas yang ditambahkan JS saat overlay harus terlihat */
+    .sidebar-overlay.active {
+        display: block;
+        /* Penting untuk membuatnya terlihat dari 'none' */
+        opacity: 1;
     }
 }
+
 
 /* --- Scrollbar Styling --- */
 ::-webkit-scrollbar {
