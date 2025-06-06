@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | GudangKu Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+
+<body class="center-form-page">
+    <div class="register-container">
+        <h2 class="mb-4"><i class="fas fa-user-plus me-2"></i> Daftar Akun GudangKu Pro</h2>
+        <form id="registerForm">
+            <div class="mb-3 text-start">
+                <label for="regUsername" class="form-label">Username</label>
+                <input type="text" class="form-control" id="regUsername" placeholder="Pilih username Anda" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="regEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="regEmail" placeholder="Masukkan email Anda" required>
+            </div>
+            <div class="mb-3 text-start">
+                <label for="regPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="regPassword" placeholder="Buat password" required>
+            </div>
+            <div class="mb-4 text-start">
+                <label for="confirmPassword" class="form-label">Konfirmasi Password</label>
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Ketik ulang password Anda"
+                    required>
+            </div>
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-register"><i class="fas fa-user-plus me-2"></i> Daftar</button>
+            </div>
+            <p class="text-center mt-3">Sudah punya akun? <a href="login.html" class="text-link">Login di sini</a></p>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Mencegah refresh halaman
+
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Password dan konfirmasi password tidak cocok!');
+                return;
+            }
+
+            // Simple client-side simulation (no actual user storage)
+            alert(`Pendaftaran akun untuk username "${username}" dan email "${email}" berhasil! Silakan login.`);
+            window.location.href = 'login.html'; // Redirect to login page after successful registration
+        });
+    </script>
+
+</body>
+
+</html>

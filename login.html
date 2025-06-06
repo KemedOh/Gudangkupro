@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | GudangKu Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+
+<body class="center-form-page">
+    <div class="login-container">
+        <h2 class="mb-4"><i class="fas fa-warehouse me-2"></i> GudangKu Pro Login</h2>
+        <form id="loginForm">
+            <div class="mb-3 text-start">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Masukkan username Anda" required>
+            </div>
+            <div class="mb-4 text-start">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Masukkan password Anda" required>
+                <div class="form-text">
+                    <a href="#" class="text-link">Lupa Password?</a>
+                </div>
+            </div>
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-login"><i class="fas fa-sign-in-alt me-2"></i> Login</button>
+            </div>
+            <p class="text-center mt-3">Belum punya akun? <a href="register.html" class="text-link">Daftar Sekarang</a>
+            </p>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Mencegah refresh halaman
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Simple client-side validation (for demo purposes)
+            if (username === 'admin' && password === 'admin123') { // Example credentials
+                alert('Login Berhasil! Selamat datang, ' + username + '!');
+                window.location.href = 'index.html'; // Redirect to dashboard
+            } else {
+                alert('Login Gagal! Username atau password salah.');
+            }
+        });
+    </script>
+</body>
+
+</html>
