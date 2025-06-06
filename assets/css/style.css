@@ -1,0 +1,833 @@
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+
+    --dark-bg: #1a1d29;
+    --card-bg: #242938;
+    --sidebar-bg: #1e2139;
+
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --border-color: #2d3142;
+    --hover-bg: #2a2f4a;
+
+    /* Colors for specific badge/button contexts to match gradients or Bootstrap defaults */
+    --bs-primary: #667eea;
+    --bs-success: #28a745;
+    --bs-info: #17a2b8;
+    --bs-warning: #ffc107;
+    --bs-danger: #dc3545;
+    --bs-secondary: #6c757d;
+}
+
+/* --- Global Reset & Base Styles --- */
+* {
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    /* Ensure consistent box model */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--dark-bg);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    margin: 0;
+    /* Remove default margin */
+    min-height: 100vh;
+    /* Ensure body takes full viewport height */
+}
+
+/* --- Centering for Login/Register Pages Only --- */
+/* This class must be added to the <body> tag in login.html and register.html */
+body.center-form-page {
+    display: flex;
+    justify-content: center;
+    /* Horisontal tengah */
+    align-items: center;
+    /* Vertikal tengah */
+    flex-direction: column;
+    /* To stack elements if needed */
+    min-height: 100vh;
+    /* Ensure centering applies to full viewport height */
+}
+
+/* --- Navbar Styles (Controlled by JavaScript) --- */
+.navbar {
+    background: var(--card-bg) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+
+    /* Properti untuk efek sembunyi/muncul yang akan diaktifkan/dinonaktifkan oleh JS */
+    opacity: 0;
+    /* Sembunyikan secara default */
+    transform: translateY(-100%);
+    /* Geser ke atas agar tidak terlihat */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    /* Transisi yang halus */
+    pointer-events: none;
+    /* Mencegah interaksi mouse saat tersembunyi */
+
+    width: 100%;
+    /* Pastikan mengambil lebar penuh */
+    position: fixed;
+    /* Penting agar bisa melayang di atas konten */
+    top: 0;
+    /* Posisikan di paling atas */
+    left: 0;
+    /* Pastikan dimulai dari tepi kiri */
+    z-index: 1050;
+    /* Pastikan di atas konten lain */
+    color: var(--text-primary);
+}
+
+/* Class ini akan ditambahkan oleh JavaScript saat navbar harus terlihat */
+.navbar.show-navbar {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    /* Izinkan interaksi mouse saat terlihat */
+}
+
+/* Pastikan semua link di navbar berwarna putih dan tidak berubah saat di-hover */
+.navbar a {
+    color: var(--text-primary) !important;
+    /* Memaksa warna putih untuk link */
+    text-decoration: none;
+    /* Menghilangkan garis bawah link */
+}
+
+.navbar a:hover {
+    color: #e0e0e0 !important;
+    /* Sedikit lebih gelap saat di-hover untuk feedback visual */
+}
+
+/* Untuk tombol di navbar (seperti dropdown toggle atau logout) */
+.navbar .btn {
+    color: var(--text-primary) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    /* Border putih transparan */
+}
+
+.navbar .btn:hover {
+    color: white !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    /* Background transparan saat hover */
+}
+
+/* Untuk teks navbar seperti "Halo, Admin Gudang!" */
+.navbar-text {
+    color: var(--text-primary) !important;
+}
+
+/* Untuk ikon (misal Font Awesome) di navbar */
+.navbar i {
+    color: var(--text-primary) !important;
+}
+
+/* --- Sidebar Styles --- */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    /* Memastikan sidebar mengambil tinggi penuh viewport */
+    background: var(--sidebar-bg);
+    padding: 2rem 1rem;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transform: translateX(0);
+    /* Default to visible on large screens */
+    animation: slideInLeft 0.5s ease forwards;
+    padding-top: 5rem;
+
+    /* --- Tambahan untuk membuat sidebar bisa di-scroll --- */
+    **overflow-y: auto;
+    **
+    /* Ini akan membuat scrollbar vertikal muncul jika konten melebihi tinggi */
+    **overflow-x: hidden;
+    **
+    /* Ini akan menyembunyikan scrollbar horizontal yang tidak diinginkan */
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+.sidebar-toggle {
+    display: none;
+    /* Hidden by default for larger screens */
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    padding: 0.8rem 1rem;
+    margin: 0.2rem 0;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    /* Prevent wrapping */
+}
+
+.nav-link:hover {
+    background: var(--hover-bg);
+    color: var(--text-primary);
+    transform: translateX(8px);
+}
+
+.nav-link.active {
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+/* --- Main Content Area --- */
+.main-content {
+    margin-left: 280px;
+    /* Space for sidebar */
+    padding: 2rem;
+    min-height: 100vh;
+    animation: fadeIn 0.8s ease;
+    /* Tambahkan padding-top untuk mengakomodasi navbar yang 'tersembunyi'
+       agar konten tidak tertutup saat navbar muncul. */
+    padding-top: 5rem;
+    /* Sesuaikan dengan tinggi navbar Anda */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Override main-content margin/padding for centered pages (like login/register) */
+body.center-form-page .main-content {
+    margin-left: 0;
+    padding: 0;
+    /* Reset padding/margin if main-content exists on centered pages */
+}
+
+/* --- Card Styles (for Dashboard, etc.) --- */
+.stats-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+}
+
+.stats-card.success::before {
+    background: var(--success-gradient);
+}
+
+.stats-card.warning::before {
+    background: var(--warning-gradient);
+}
+
+.stats-card.danger::before {
+    background: var(--danger-gradient);
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stats-card.success .stats-number {
+    background: var(--success-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stats-card.warning .stats-number {
+    background: var(--warning-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stats-card.danger .stats-number {
+    background: var(--danger-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.chart-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+}
+
+/* --- Recent Activity & Quick Actions --- */
+.recent-activity {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    padding: 1rem;
+    border-left: 3px solid var(--primary-gradient);
+    margin-bottom: 1rem;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 0 12px 12px 0;
+    animation: slideInRight 0.5s ease;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.btn-gradient {
+    background: var(--primary-gradient);
+    border: none;
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    color: white;
+}
+
+.quick-action {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.quick-action:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    border-color: #667eea;
+}
+
+.quick-action i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.inventory-alert {
+    background: linear-gradient(135deg, rgba(245, 87, 108, 0.1), rgba(240, 147, 251, 0.1));
+    border: 1px solid rgba(245, 87, 108, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* --- Table Styles --- */
+.table {
+    --bs-table-color: var(--text-primary);
+    --bs-table-bg: var(--card-bg);
+    --bs-table-border-color: var(--border-color);
+    --bs-table-striped-bg: var(--hover-bg);
+    /* Darker shade for striped rows */
+    --bs-table-hover-bg: #3a415a;
+    /* Even darker shade on hover */
+}
+
+.table thead th {
+    background-color: var(--sidebar-bg);
+    /* Darker header background */
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* Specific table row highlights for alerts page */
+.table-warning {
+    --bs-table-bg: rgba(255, 193, 7, 0.15);
+    --bs-table-striped-bg: rgba(255, 193, 7, 0.2);
+    --bs-table-hover-bg: rgba(255, 193, 7, 0.25);
+    color: var(--text-primary);
+}
+
+.table-danger {
+    --bs-table-bg: rgba(220, 53, 69, 0.15);
+    --bs-table-striped-bg: rgba(220, 53, 69, 0.2);
+    --bs-table-hover-bg: rgba(220, 53, 69, 0.25);
+    color: var(--text-primary);
+}
+
+.table-success {
+    --bs-table-bg: rgba(40, 167, 69, 0.15);
+    --bs-table-striped-bg: rgba(40, 167, 69, 0.2);
+    --bs-table-hover-bg: rgba(40, 167, 69, 0.25);
+    color: var(--text-primary);
+}
+
+.table-info {
+    --bs-table-bg: rgba(23, 162, 184, 0.15);
+    --bs-table-striped-bg: rgba(23, 162, 184, 0.2);
+    --bs-table-hover-bg: rgba(23, 162, 184, 0.25);
+    color: var(--text-primary);
+}
+
+/* --- Form Styles (General & Login/Register Specific) --- */
+.form-control,
+.form-select {
+    background-color: #4a5568;
+    /* Input background */
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    /* Input text color */
+    padding: 12px 15px;
+    border-radius: 8px;
+}
+
+.form-control::placeholder,
+.form-select::placeholder {
+    color: var(--text-secondary);
+    /* Placeholder color */
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #4a5568;
+    border-color: var(--primary-gradient);
+    /* Use gradient for focus border */
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+    color: var(--text-primary);
+}
+
+.form-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-align: left;
+    display: block;
+    /* Ensure label takes full width */
+}
+
+/* Specific button colors for forms and actions */
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #5a6ed0;
+    border-color: #5a6ed0;
+}
+
+.btn-success {
+    background-color: var(--bs-success);
+    border-color: var(--bs-success);
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #218838;
+}
+
+.btn-warning {
+    background-color: var(--bs-warning);
+    border-color: var(--bs-warning);
+    color: #212529;
+}
+
+/* Dark text for warning */
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+.btn-danger {
+    background-color: var(--bs-danger);
+    border-color: var(--bs-danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-info {
+    background-color: var(--bs-info);
+    border-color: var(--bs-info);
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
+
+.btn-secondary {
+    background-color: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+    border-color: #4e555b;
+}
+
+/* Badge styles to match gradient theme or standard colors */
+.badge {
+    padding: 0.5em 0.8em;
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+
+.badge.bg-primary {
+    background-color: var(--bs-primary) !important;
+    color: white;
+}
+
+.badge.bg-success {
+    background-color: var(--bs-success) !important;
+    color: white;
+}
+
+.badge.bg-info {
+    background-color: var(--bs-info) !important;
+    color: white;
+}
+
+.badge.bg-warning {
+    background-color: var(--bs-warning) !important;
+    color: #212529;
+}
+
+/* Dark text for warning */
+.badge.bg-danger {
+    background-color: var(--bs-danger) !important;
+    color: white;
+}
+
+.badge.bg-secondary {
+    background-color: var(--bs-secondary) !important;
+    color: white;
+}
+
+/* Login/Register Container Styles */
+.login-container,
+.register-container {
+    background-color: var(--card-bg);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    margin: auto;
+    /* Ensures it plays well with flex centering */
+}
+
+.register-container {
+    max-width: 450px;
+    /* Slightly wider for more inputs */
+}
+
+.login-container h2,
+.register-container h2 {
+    color: var(--bs-primary);
+    /* Use primary color for login heading */
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+.register-container h2 {
+    color: var(--bs-success);
+    /* Use success color for register heading */
+}
+
+.login-container .form-control {
+    border: 1px solid var(--bs-primary);
+    /* Primary border for login inputs */
+}
+
+.register-container .form-control {
+    border: 1px solid var(--bs-success);
+    /* Success border for register inputs */
+}
+
+.login-container .form-control:focus {
+    border-color: #8da4f7;
+    /* Lighter primary on focus */
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+}
+
+.register-container .form-control:focus {
+    border-color: #4CAF50;
+    /* Lighter success on focus */
+    box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+}
+
+.login-container .form-label,
+.register-container .form-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-align: left;
+    display: block;
+}
+
+.btn-login {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    width: 100%;
+}
+
+.btn-login:hover {
+    background-color: #5a6ed0;
+    border-color: #5a6ed0;
+}
+
+.btn-register {
+    background-color: var(--bs-success);
+    border-color: var(--bs-success);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    width: 100%;
+}
+
+.btn-register:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.text-link {
+    color: var(--bs-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.text-link:hover {
+    color: #8da4f7;
+}
+
+.form-text {
+    color: var(--text-secondary);
+    text-align: left;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+
+/* --- Accordion (for Help page) --- */
+.accordion-item {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    margin-bottom: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.accordion-button {
+    background-color: var(--hover-bg) !important;
+    color: var(--text-primary);
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background: var(--primary-gradient) !important;
+    color: white !important;
+    box-shadow: none;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.accordion-body {
+    background-color: var(--card-bg);
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color);
+    padding: 1.25rem;
+}
+
+/* List group (for Help page) */
+.list-group-item {
+    background-color: var(--card-bg) !important;
+    border: none;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 0.8rem 1.25rem;
+}
+
+.list-group-item:last-child {
+    border-bottom: none !important;
+}
+
+/* --- Footer --- */
+.footer {
+    margin-left: 280px;
+    /* Space for sidebar */
+    background: var(--card-bg);
+    border-top: 1px solid var(--border-color);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+    position: relative;
+    bottom: 0;
+    width: calc(100% - 280px);
+    /* Adjust width for sidebar */
+    box-sizing: border-box;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 100%;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .footer {
+        margin-left: 0;
+        width: 100%;
+        /* Full width on small screens */
+    }
+
+    .sidebar-toggle {
+        display: block;
+        background: var(--primary-gradient);
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+    }
+}
+
+/* --- Scrollbar Styling --- */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-gradient);
+    border-radius: 4px;
+}
+
+/* --- Utility/Animation Classes --- */
+.loading-animation {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.trend-up {
+    color: #4facfe;
+}
+
+.trend-down {
+    color: #fa709a;
+}
